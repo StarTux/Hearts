@@ -1,0 +1,8 @@
+name: Hearts
+description: Display mob health above their heads
+author: StarTux
+version: 0.1
+main: com.winthier.hearts.HeartsPlugin
+depend: [ Custom ]
+commands: {}
+permissions: {}
