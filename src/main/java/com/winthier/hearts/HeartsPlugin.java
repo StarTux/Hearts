@@ -12,6 +12,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffectType;
 
 @Getter
 public final class HeartsPlugin extends JavaPlugin implements Listener {
@@ -33,6 +34,7 @@ public final class HeartsPlugin extends JavaPlugin implements Listener {
         if (event.getEntity() instanceof org.bukkit.entity.Player) return;
         if (event.getEntity() instanceof org.bukkit.entity.ArmorStand) return;
         LivingEntity living = (LivingEntity)event.getEntity();
+        if (living.hasPotionEffect(PotionEffectType.INVISIBILITY)) return;
         UUID uuid = living.getUniqueId();
         HealthBarEntity.Watcher watcher = healthBars.get(uuid);
         if (watcher == null) {

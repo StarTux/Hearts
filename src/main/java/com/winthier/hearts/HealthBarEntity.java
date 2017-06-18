@@ -18,6 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.potion.PotionEffectType;
 
 public final class HealthBarEntity implements CustomEntity, TickableEntity {
     public static final String CUSTOM_ID = "hearts:health_bar";
@@ -79,7 +80,7 @@ public final class HealthBarEntity implements CustomEntity, TickableEntity {
         private int ticks;
 
         void onTick() {
-            if (living == null || !living.isValid()) {
+            if (living == null || !living.isValid() || living.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
                 remove();
             } else {
                 if (living.getCustomName() == null) {
