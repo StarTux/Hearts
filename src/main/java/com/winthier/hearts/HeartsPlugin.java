@@ -11,6 +11,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 
@@ -28,8 +30,7 @@ public final class HeartsPlugin extends JavaPlugin implements Listener {
         event.addEntity(new HealthBarEntity(this));
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    public void onEntityDamage(EntityDamageEvent event) {
+    void onEvent(EntityEvent event) {
         if (!(event.getEntity() instanceof LivingEntity)) return;
         if (event.getEntity() instanceof org.bukkit.entity.Player) return;
         if (event.getEntity() instanceof org.bukkit.entity.ArmorStand) return;
@@ -42,5 +43,15 @@ public final class HeartsPlugin extends JavaPlugin implements Listener {
             healthBars.put(uuid, watcher);
             watcher.setLiving(living);
         }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void onEntityDamage(EntityDamageEvent event) {
+        onEvent(event);
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void onEntityRegainHealth(EntityRegainHealthEvent event) {
+        onEvent(event);
     }
 }
