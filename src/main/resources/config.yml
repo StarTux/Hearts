@@ -1,2 +1,9 @@
-ShowNumericalHealth: true
-ShowNumericalMaxHealth: true
+colors:
+  FullHeart: LIGHT_PURPLE
+  HalfHeart: DARK_PURPLE
+  EmptyHeart: BLACK
+  Numbers: LIGHT_PURPLE
+  Slash: DARK_GRAY
+ShowNumericalHealth: false
+ShowNumericalMaxHealth: false
+DropHealth: true

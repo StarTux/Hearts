@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import lombok.Getter;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -19,20 +20,32 @@ import org.bukkit.potion.PotionEffectType;
 @Getter
 public final class HeartsPlugin extends JavaPlugin implements Listener {
     private final Map<UUID, HealthBarEntity.Watcher> healthBars = new HashMap<>();
-    boolean showNumericalHealth, showNumericalMaxHealth;
+    ChatColor fullHeartColor = ChatColor.LIGHT_PURPLE;
+    ChatColor halfHeartColor = ChatColor.DARK_PURPLE;
+    ChatColor emptyHeartColor = ChatColor.BLACK;
+    ChatColor numbersColor = ChatColor.RED;
+    ChatColor slashColor = ChatColor.DARK_GRAY;
+    boolean showNumericalHealth, showNumericalMaxHealth, dropHealth;
 
     @Override
     public void onEnable() {
         reloadConfig();
         saveDefaultConfig();
         getServer().getPluginManager().registerEvents(this, this);
+        fullHeartColor = ChatColor.valueOf(getConfig().getString("colors.FullHeart").toUpperCase());
+        halfHeartColor = ChatColor.valueOf(getConfig().getString("colors.HalfHeart").toUpperCase());
+        emptyHeartColor = ChatColor.valueOf(getConfig().getString("colors.EmptyHeart").toUpperCase());
+        numbersColor = ChatColor.valueOf(getConfig().getString("colors.Numbers").toUpperCase());
+        slashColor = ChatColor.valueOf(getConfig().getString("colors.Slash").toUpperCase());
         showNumericalHealth = getConfig().getBoolean("ShowNumericalHealth");
         showNumericalMaxHealth = getConfig().getBoolean("ShowNumericalMaxHealth");
+        dropHealth = getConfig().getBoolean("DropHealth");
     }
 
     @EventHandler
     public void onCustomRegister(CustomRegisterEvent event) {
         event.addEntity(new HealthBarEntity(this));
+        event.addEntity(new HealthDropEntity(this));
     }
 
     void onEvent(EntityEvent event) {
@@ -53,6 +66,14 @@ public final class HeartsPlugin extends JavaPlugin implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onEntityDamage(EntityDamageEvent event) {
         onEvent(event);
+        if (dropHealth && event.getEntity() instanceof LivingEntity) {
+            LivingEntity living = (LivingEntity)event.getEntity();
+            HealthDropEntity.Watcher watcher = (HealthDropEntity.Watcher)CustomPlugin.getInstance().getEntityManager().spawnEntity(living.getEyeLocation(), HealthDropEntity.CUSTOM_ID);
+            double dmg = event.getFinalDamage();
+            if (dmg >= 1) {
+                watcher.setDamage(dmg);
+            }
+        }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)

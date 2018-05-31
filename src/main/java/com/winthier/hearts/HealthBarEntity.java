@@ -8,7 +8,6 @@ import com.winthier.custom.entity.TickableEntity;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.ArmorStand;
@@ -17,6 +16,8 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityPortalEnterEvent;
+import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.potion.PotionEffectType;
 
@@ -62,12 +63,20 @@ public final class HealthBarEntity implements CustomEntity, TickableEntity {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onEntityDamage(EntityDamageEvent event, EntityContext context) {
         event.setCancelled(true);
-        ((Watcher)context.getEntityWatcher()).remove();
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event, EntityContext context) {
         event.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onEntityTeleport(EntityTeleportEvent event, EntityContext context) {
+        event.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onEntityPortalEnter(EntityPortalEnterEvent event, EntityContext context) {
         ((Watcher)context.getEntityWatcher()).remove();
     }
 
@@ -122,21 +131,21 @@ public final class HealthBarEntity implements CustomEntity, TickableEntity {
             }
             StringBuilder sb = new StringBuilder();
             if (plugin.showNumericalHealth) {
-                sb.append(ChatColor.RED).append((int)health);
+                sb.append(plugin.numbersColor).append((int)health);
                 if (plugin.showNumericalMaxHealth) {
-                    sb.append(ChatColor.DARK_GRAY).append("/").append(ChatColor.RED).append((int)maxHealth).append(" ");
+                    sb.append(plugin.slashColor).append("/").append(plugin.numbersColor).append((int)maxHealth).append(" ");
                 }
             }
             if (fullHearts > 0) {
-                sb.append(ChatColor.RED);
+                sb.append(plugin.fullHeartColor);
                 for (int i = 0; i < fullHearts; i += 1) sb.append(heart);
             }
             if (halfHeart > 0) {
-                sb.append(ChatColor.DARK_RED);
+                sb.append(plugin.halfHeartColor);
                 sb.append(heart);
             }
             if (emptyHearts > 0) {
-                sb.append(ChatColor.DARK_GRAY);
+                sb.append(plugin.emptyHeartColor);
                 for (int i = 0; i < emptyHearts; i += 1) sb.append(heart);
             }
             entity.setCustomName(sb.toString());
