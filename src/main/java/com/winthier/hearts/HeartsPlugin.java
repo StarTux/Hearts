@@ -19,10 +19,15 @@ import org.bukkit.potion.PotionEffectType;
 @Getter
 public final class HeartsPlugin extends JavaPlugin implements Listener {
     private final Map<UUID, HealthBarEntity.Watcher> healthBars = new HashMap<>();
+    boolean showNumericalHealth, showNumericalMaxHealth;
 
     @Override
     public void onEnable() {
+        reloadConfig();
+        saveDefaultConfig();
         getServer().getPluginManager().registerEvents(this, this);
+        showNumericalHealth = getConfig().getBoolean("ShowNumericalHealth");
+        showNumericalMaxHealth = getConfig().getBoolean("ShowNumericalMaxHealth");
     }
 
     @EventHandler

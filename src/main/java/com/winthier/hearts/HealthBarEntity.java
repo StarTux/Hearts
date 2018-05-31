@@ -121,7 +121,12 @@ public final class HealthBarEntity implements CustomEntity, TickableEntity {
                 emptyHearts = (totalHearts - fullHearts - halfHeart);
             }
             StringBuilder sb = new StringBuilder();
-            sb.append(ChatColor.RED).append((int)health).append(ChatColor.DARK_GRAY).append("/").append(ChatColor.RED).append((int)maxHealth).append(" ");
+            if (plugin.showNumericalHealth) {
+                sb.append(ChatColor.RED).append((int)health);
+                if (plugin.showNumericalMaxHealth) {
+                    sb.append(ChatColor.DARK_GRAY).append("/").append(ChatColor.RED).append((int)maxHealth).append(" ");
+                }
+            }
             if (fullHearts > 0) {
                 sb.append(ChatColor.RED);
                 for (int i = 0; i < fullHearts; i += 1) sb.append(heart);
