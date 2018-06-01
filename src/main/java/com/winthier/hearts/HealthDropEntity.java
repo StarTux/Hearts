@@ -5,6 +5,7 @@ import com.winthier.custom.entity.CustomEntity;
 import com.winthier.custom.entity.EntityContext;
 import com.winthier.custom.entity.EntityWatcher;
 import com.winthier.custom.entity.TickableEntity;
+import java.util.Random;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -23,6 +24,7 @@ import org.bukkit.util.Vector;
 public final class HealthDropEntity implements CustomEntity, TickableEntity {
     public static final String CUSTOM_ID = "hearts:health_drop";
     private final HeartsPlugin plugin;
+    private Random random = new Random(System.currentTimeMillis());
 
     HealthDropEntity(HeartsPlugin plugin) {
         this.plugin = plugin;
@@ -40,7 +42,7 @@ public final class HealthDropEntity implements CustomEntity, TickableEntity {
                 as.setMarker(true);
                 as.setSmall(true);
                 as.setGravity(true);
-                as.setVelocity(new Vector(0, 0.3, 0));
+                as.setVelocity(new Vector(random.nextDouble() * 0.2, 0.3, random.nextDouble() * 0.2));
             });
     }
 
@@ -84,6 +86,7 @@ public final class HealthDropEntity implements CustomEntity, TickableEntity {
         private final ArmorStand entity;
         private final HealthDropEntity customEntity;
         private int ticks = 0;
+        private double damage;
 
         void onTick() {
             if (ticks <= 0) {
@@ -91,33 +94,19 @@ public final class HealthDropEntity implements CustomEntity, TickableEntity {
             } else {
                 ticks -= 1;
             }
+            if (ticks == 40) {
+                int h = (int)Math.round(damage);
+                entity.setCustomName("" + ChatColor.GRAY + h);
+            } else if (ticks == 20) {
+                int h = (int)Math.round(damage);
+                entity.setCustomName("" + ChatColor.DARK_GRAY + h);
+            }
         }
 
-        void setDamage(double health) {
-            int h = (int)Math.round(health);
-            ChatColor color;
-            boolean bold = false;
-            if (h < 5) {
-                color = ChatColor.DARK_GRAY;
-            } else if (h < 10) {
-                color = ChatColor.GRAY;
-            } else if (h < 20) {
-                color = ChatColor.WHITE;
-            } else if (h < 30) {
-                color = ChatColor.YELLOW;
-            } else if (h < 40) {
-                color = ChatColor.GOLD;
-            } else if (h < 50) {
-                color = ChatColor.RED;
-            } else {
-                color = ChatColor.RED;
-                bold = true;
-            }
-            if (bold) {
-                entity.setCustomName("" + color + ChatColor.BOLD + h);
-            } else {
-                entity.setCustomName("" + color + h);
-            }
+        void setDamage(double damage) {
+            this.damage = damage;
+            int h = (int)Math.round(damage);
+            entity.setCustomName("" + ChatColor.WHITE + h);
             entity.setCustomNameVisible(true);
             ticks = 60;
         }
