@@ -67,10 +67,10 @@ public final class HeartsPlugin extends JavaPlugin implements Listener {
     public void onEntityDamage(EntityDamageEvent event) {
         onEvent(event);
         if (dropHealth && event.getEntity() instanceof LivingEntity) {
-            LivingEntity living = (LivingEntity)event.getEntity();
-            HealthDropEntity.Watcher watcher = (HealthDropEntity.Watcher)CustomPlugin.getInstance().getEntityManager().spawnEntity(living.getEyeLocation(), HealthDropEntity.CUSTOM_ID);
-            double dmg = event.getFinalDamage();
+            int dmg = (int)Math.round(event.getFinalDamage());
             if (dmg >= 1) {
+                LivingEntity living = (LivingEntity)event.getEntity();
+                HealthDropEntity.Watcher watcher = (HealthDropEntity.Watcher)CustomPlugin.getInstance().getEntityManager().spawnEntity(living.getEyeLocation(), HealthDropEntity.CUSTOM_ID);
                 watcher.setDamage(dmg);
             }
         }
@@ -79,5 +79,13 @@ public final class HeartsPlugin extends JavaPlugin implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onEntityRegainHealth(EntityRegainHealthEvent event) {
         onEvent(event);
+        if (dropHealth && event.getEntity() instanceof LivingEntity) {
+            int health = (int)Math.round(event.getAmount());
+            if (health >= 1) {
+            LivingEntity living = (LivingEntity)event.getEntity();
+            HealthDropEntity.Watcher watcher = (HealthDropEntity.Watcher)CustomPlugin.getInstance().getEntityManager().spawnEntity(living.getEyeLocation(), HealthDropEntity.CUSTOM_ID);
+                watcher.setHealing(health);
+            }
+        }
     }
 }

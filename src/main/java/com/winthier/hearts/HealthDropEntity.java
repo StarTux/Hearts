@@ -86,7 +86,8 @@ public final class HealthDropEntity implements CustomEntity, TickableEntity {
         private final ArmorStand entity;
         private final HealthDropEntity customEntity;
         private int ticks = 0;
-        private double damage;
+        private int health;
+        private boolean isHealing;
 
         void onTick() {
             if (ticks <= 0) {
@@ -95,18 +96,29 @@ public final class HealthDropEntity implements CustomEntity, TickableEntity {
                 ticks -= 1;
             }
             if (ticks == 40) {
-                int h = (int)Math.round(damage);
-                entity.setCustomName("" + ChatColor.GRAY + h);
+                entity.setGravity(false);
+                if (isHealing) {
+                    entity.setCustomName("" + ChatColor.DARK_GREEN + health);
+                } else {
+                    entity.setCustomName("" + ChatColor.GRAY + health);
+                }
             } else if (ticks == 20) {
-                int h = (int)Math.round(damage);
-                entity.setCustomName("" + ChatColor.DARK_GRAY + h);
+                entity.setCustomName("" + ChatColor.DARK_GRAY + health);
             }
         }
 
-        void setDamage(double damage) {
-            this.damage = damage;
-            int h = (int)Math.round(damage);
-            entity.setCustomName("" + ChatColor.WHITE + h);
+        void setDamage(int health) {
+            this.health = health;
+            this.isHealing = false;
+            entity.setCustomName("" + ChatColor.WHITE + health);
+            entity.setCustomNameVisible(true);
+            ticks = 60;
+        }
+
+        void setHealing(int health) {
+            this.health = health;
+            this.isHealing = true;
+            entity.setCustomName("" + ChatColor.GREEN + health);
             entity.setCustomNameVisible(true);
             ticks = 60;
         }
