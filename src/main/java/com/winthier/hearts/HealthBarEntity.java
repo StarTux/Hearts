@@ -110,7 +110,6 @@ public final class HealthBarEntity implements CustomEntity, TickableEntity {
 
         void remove() {
             entity.remove();
-            CustomPlugin.getInstance().getEntityManager().removeEntityWatcher(this);
             if (living != null) plugin.getHealthBars().remove(living.getUniqueId());
         }
 
