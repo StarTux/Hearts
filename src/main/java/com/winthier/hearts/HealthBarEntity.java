@@ -1,6 +1,5 @@
 package com.winthier.hearts;
 
-import com.winthier.custom.CustomPlugin;
 import com.winthier.custom.entity.CustomEntity;
 import com.winthier.custom.entity.EntityContext;
 import com.winthier.custom.entity.EntityWatcher;

@@ -82,6 +82,9 @@ public final class HeartsPlugin extends JavaPlugin implements Listener {
             case CRAMMING:
             case DROWNING:
                 break;
+            case FIRE:
+            case LAVA:
+                if (event.getEntity().getType() == EntityType.BAT) break;
             default:
                 int dmg = (int)Math.round(event.getFinalDamage());
                 if (dmg >= 1) {
