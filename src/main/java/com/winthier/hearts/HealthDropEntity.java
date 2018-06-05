@@ -1,6 +1,5 @@
 package com.winthier.hearts;
 
-import com.winthier.custom.CustomPlugin;
 import com.winthier.custom.entity.CustomEntity;
 import com.winthier.custom.entity.EntityContext;
 import com.winthier.custom.entity.EntityWatcher;
@@ -107,18 +106,18 @@ public final class HealthDropEntity implements CustomEntity, TickableEntity {
             }
         }
 
-        void setDamage(int health) {
-            this.health = health;
+        void setDamage(int h) {
+            this.health = h;
             this.isHealing = false;
-            entity.setCustomName("" + ChatColor.WHITE + health);
+            entity.setCustomName("" + ChatColor.WHITE + h);
             entity.setCustomNameVisible(true);
             ticks = 60;
         }
 
-        void setHealing(int health) {
-            this.health = health;
+        void setHealing(int h) {
+            this.health = h;
             this.isHealing = true;
-            entity.setCustomName("" + ChatColor.GREEN + health);
+            entity.setCustomName("" + ChatColor.GREEN + h);
             entity.setCustomNameVisible(true);
             ticks = 60;
         }
