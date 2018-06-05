@@ -58,7 +58,7 @@ public final class HealthDropEntity implements CustomEntity, TickableEntity {
 
     @Override
     public void entityWillUnload(EntityWatcher entityWatcher) {
-        CustomPlugin.getInstance().getEntityManager().removeEntityWatcher(entityWatcher);
+        entityWatcher.getEntity().remove();
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -78,7 +78,7 @@ public final class HealthDropEntity implements CustomEntity, TickableEntity {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onEntityPortalEnter(EntityPortalEnterEvent event, EntityContext context) {
-        CustomPlugin.getInstance().getEntityManager().removeEntityWatcher(context.getEntityWatcher());
+        context.getEntity().remove();
     }
 
     @Getter @Setter @RequiredArgsConstructor
