@@ -42,6 +42,7 @@ public final class HealthBarEntity implements CustomEntity, TickableEntity {
                 as.setMarker(true);
                 as.setSmall(true);
                 as.setGravity(false);
+                as.setInvulnerable(true);
             });
     }
 

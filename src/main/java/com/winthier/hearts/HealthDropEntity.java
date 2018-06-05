@@ -40,6 +40,7 @@ public final class HealthDropEntity implements CustomEntity, TickableEntity {
                 as.setVisible(false);
                 as.setMarker(true);
                 as.setSmall(true);
+                as.setInvulnerable(true);
             });
     }
 
