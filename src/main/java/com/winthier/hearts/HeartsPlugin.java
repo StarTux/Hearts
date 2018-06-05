@@ -78,6 +78,9 @@ public final class HeartsPlugin extends JavaPlugin implements Listener {
             case MELTING:
             case VOID:
             case WITHER:
+            case SUFFOCATION:
+            case CRAMMING:
+            case DROWNING:
                 break;
             default:
                 int dmg = (int)Math.round(event.getFinalDamage());
