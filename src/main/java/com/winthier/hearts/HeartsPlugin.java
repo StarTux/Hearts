@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 import lombok.Getter;
 import org.bukkit.ChatColor;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -68,11 +69,23 @@ public final class HeartsPlugin extends JavaPlugin implements Listener {
     public void onEntityDamage(EntityDamageEvent event) {
         onEvent(event);
         if (dropHealth && event.getEntity() instanceof LivingEntity && event.getEntity().getType() != EntityType.ARMOR_STAND) {
-            int dmg = (int)Math.round(event.getFinalDamage());
-            if (dmg >= 1) {
-                LivingEntity living = (LivingEntity)event.getEntity();
-                HealthDropEntity.Watcher watcher = (HealthDropEntity.Watcher)CustomPlugin.getInstance().getEntityManager().spawnEntity(living.getEyeLocation(), HealthDropEntity.CUSTOM_ID);
-                watcher.setDamage(dmg);
+            switch (event.getCause()) {
+            case FIRE_TICK:
+            case POISON:
+            case STARVATION:
+            case THORNS:
+            case HOT_FLOOR:
+            case MELTING:
+            case VOID:
+            case WITHER:
+                break;
+            default:
+                int dmg = (int)Math.round(event.getFinalDamage());
+                if (dmg >= 1) {
+                    LivingEntity living = (LivingEntity)event.getEntity();
+                    HealthDropEntity.Watcher watcher = (HealthDropEntity.Watcher)CustomPlugin.getInstance().getEntityManager().spawnEntity(living.getLocation().add(0, living.getHeight(), 0), HealthDropEntity.CUSTOM_ID);
+                    watcher.setDamage(dmg);
+                }
             }
         }
     }
@@ -81,11 +94,18 @@ public final class HeartsPlugin extends JavaPlugin implements Listener {
     public void onEntityRegainHealth(EntityRegainHealthEvent event) {
         onEvent(event);
         if (dropHealth && event.getEntity() instanceof LivingEntity && event.getEntity().getType() != EntityType.ARMOR_STAND) {
-            int health = (int)Math.round(event.getAmount());
-            if (health >= 1) {
-            LivingEntity living = (LivingEntity)event.getEntity();
-            HealthDropEntity.Watcher watcher = (HealthDropEntity.Watcher)CustomPlugin.getInstance().getEntityManager().spawnEntity(living.getEyeLocation(), HealthDropEntity.CUSTOM_ID);
-                watcher.setHealing(health);
+            switch (event.getRegainReason()) {
+            case SATIATED:
+            case ENDER_CRYSTAL:
+            case MAGIC_REGEN:
+                break;
+            default:
+                LivingEntity living = (LivingEntity)event.getEntity();
+                int health = Math.min((int)Math.round(living.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() - living.getHealth()), (int)Math.round(event.getAmount()));
+                if (health >= 1) {
+                    HealthDropEntity.Watcher watcher = (HealthDropEntity.Watcher)CustomPlugin.getInstance().getEntityManager().spawnEntity(living.getLocation().add(0, living.getHeight(), 0), HealthDropEntity.CUSTOM_ID);
+                    watcher.setHealing(health);
+                }
             }
         }
     }

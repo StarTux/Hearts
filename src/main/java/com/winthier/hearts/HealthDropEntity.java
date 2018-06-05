@@ -40,8 +40,6 @@ public final class HealthDropEntity implements CustomEntity, TickableEntity {
                 as.setVisible(false);
                 as.setMarker(true);
                 as.setSmall(true);
-                as.setGravity(true);
-                as.setVelocity(new Vector(random.nextDouble() * 0.2, 0.3, random.nextDouble() * 0.2));
             });
     }
 
@@ -94,12 +92,17 @@ public final class HealthDropEntity implements CustomEntity, TickableEntity {
             } else {
                 ticks -= 1;
             }
-            if (ticks == 40) {
-                entity.setGravity(false);
+            if (ticks > 50) {
+                if (isHealing) {
+                    entity.teleport(entity.getLocation().add(0, 0.1, 0));
+                }
+            } else if (ticks == 40) {
                 if (isHealing) {
                     entity.setCustomName("" + ChatColor.DARK_GREEN + health);
+                    entity.setVelocity(new Vector(0, 0, 0));
                 } else {
                     entity.setCustomName("" + ChatColor.GRAY + health);
+                    entity.setGravity(false);
                 }
             } else if (ticks == 20) {
                 entity.setCustomName("" + ChatColor.DARK_GRAY + health);
@@ -111,6 +114,7 @@ public final class HealthDropEntity implements CustomEntity, TickableEntity {
             this.isHealing = false;
             entity.setCustomName("" + ChatColor.WHITE + h);
             entity.setCustomNameVisible(true);
+            entity.setVelocity(new Vector(random.nextDouble() * 0.4 - 0.2, 0.3, random.nextDouble() * 0.4 - 0.2));
             ticks = 60;
         }
 
@@ -119,6 +123,8 @@ public final class HealthDropEntity implements CustomEntity, TickableEntity {
             this.isHealing = true;
             entity.setCustomName("" + ChatColor.GREEN + h);
             entity.setCustomNameVisible(true);
+            entity.setGravity(false);
+            entity.setVelocity(new Vector(0, 10, 0));
             ticks = 60;
         }
     }
