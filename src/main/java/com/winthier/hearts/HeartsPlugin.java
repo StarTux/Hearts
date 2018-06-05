@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 import lombok.Getter;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -66,7 +67,7 @@ public final class HeartsPlugin extends JavaPlugin implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onEntityDamage(EntityDamageEvent event) {
         onEvent(event);
-        if (dropHealth && event.getEntity() instanceof LivingEntity) {
+        if (dropHealth && event.getEntity() instanceof LivingEntity && event.getEntity().getType() != EntityType.ARMOR_STAND) {
             int dmg = (int)Math.round(event.getFinalDamage());
             if (dmg >= 1) {
                 LivingEntity living = (LivingEntity)event.getEntity();
@@ -79,7 +80,7 @@ public final class HeartsPlugin extends JavaPlugin implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onEntityRegainHealth(EntityRegainHealthEvent event) {
         onEvent(event);
-        if (dropHealth && event.getEntity() instanceof LivingEntity) {
+        if (dropHealth && event.getEntity() instanceof LivingEntity && event.getEntity().getType() != EntityType.ARMOR_STAND) {
             int health = (int)Math.round(event.getAmount());
             if (health >= 1) {
             LivingEntity living = (LivingEntity)event.getEntity();
