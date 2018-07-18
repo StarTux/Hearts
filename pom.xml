@@ -4,9 +4,9 @@
   <groupId>com.winthier.hearts</groupId>
   <artifactId>hearts</artifactId>
   <packaging>jar</packaging>
-  <version>0.1</version>
+  <version>0.1-SNAPSHOT</version>
   <name>Hearts</name>
-  <url>http://www.winthier.com</url>
+  <url>https://www.cavetale.com</url>
   <repositories>
     <!-- Spigot Repo -->
     <repository>
@@ -19,7 +19,7 @@
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
-      <version>1.12.2-R0.1-SNAPSHOT</version>
+      <version>1.13-pre7-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <!-- Lombok -->
@@ -33,7 +33,7 @@
     <dependency>
       <groupId>com.winthier.custom</groupId>
       <artifactId>custom</artifactId>
-      <version>0.1</version>
+      <version>0.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
